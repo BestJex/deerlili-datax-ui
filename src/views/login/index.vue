@@ -4,26 +4,23 @@
       <h1 class="loginTitle">登录</h1>
       <p class="loginSystem">离线数据同步平台</p>
       <el-form
-        ref="ruleForm"
-        :model="ruleForm"
-        :rules="rules"
+        ref="loginForm"
+        :model="loginForm"
+        :rules="loginRules"
+        class="demo-loginForm"
         label-width="100px"
-        class="demo-ruleForm"
         hide-required-asterisk
       >
-        <!-- <el-form-item>
-          <el-alert type="success" description="线上演示环境使用奇文社区账号进行登录，网址：www.qiwenshare.com" />
-        </el-form-item> -->
-        <el-form-item prop="userName">
+        <el-form-item prop="username">
           <el-input
-            v-model="ruleForm.userName"
+            v-model="loginForm.username"
             prefix-icon="el-icon-user"
             placeholder="用户名"
           />
         </el-form-item>
         <el-form-item prop="password">
           <el-input
-            v-model="ruleForm.password"
+            v-model="loginForm.password"
             prefix-icon="el-icon-lock"
             placeholder="密码"
             show-password
@@ -36,7 +33,7 @@
             success-text="验证通过"
             handler-icon="el-icon-d-arrow-right"
             success-icon="el-icon-circle-check"
-            width="375"
+            :width="375"
             handler-bg="#F5F7FA"
             :is-passing.sync="isPassing"
             @update:isPassing="updateIsPassing"
@@ -44,12 +41,15 @@
         </el-form-item>
         <!-- <el-form-item class="forgetPassword">忘记密码</el-form-item> -->
         <el-form-item class="loginButtonWrapper">
-          <el-button class="loginButton" type="primary" :disabled="submitDisabled" @click="submitForm('ruleForm')">登录</el-button>
+          <el-button class="loginButton" type="primary" :disabled="submitDisabled" @click.native.prevent="handleLogin">登录</el-button>
         </el-form-item>
+        <!-- <el-form-item>
+          <el-alert type="success" style="text-align:center;" description="如有问题请邮箱联系：deerlili@163.com" />
+        </el-form-item> -->
         <!-- <el-form-item style="text-align:left;">
           其他账号登录：
           <a href="/api/user/login/qq">
-            <img :src="qqIcon" style="width: 30px;">
+            <img :src="qqIcon" style="width: 30px;" />
           </a>
         </el-form-item> -->
       </el-form>
@@ -59,78 +59,80 @@
 
 <script>
 import CanvasNest from 'canvas-nest.js'
-import DragVerify from '@/components/DragVerify.vue'
+import DragVerify from '@/components/DragVerify/index.vue'
 
-// 配置
+// 帆布窝配置
 const config = {
-  color: '64, 158, 255', // 线条颜色
-  pointColor: '64, 158, 255', // 节点颜色
-  opacity: 0.5, // 线条透明度
-  count: 99, // 线条数量
-  zIndex: -1 // 画面层级
+  color: '51, 255, 51', // 线条颜色
+  pointColor: '255, 62, 150', // 节点颜色
+  opacity: 1, // 线条透明度
+  count: 199, // 线条数量
+  zIndex: 1 // 画面层级
 }
 
 export default {
   name: 'Login',
   components: { DragVerify },
   data() {
+    const validatePassword = (rule, value, callback) => {
+      if (value.length < 6) {
+        callback(new Error('长度在 5 到 20 个字符'))
+      } else {
+        callback()
+      }
+    }
     return {
-      ruleForm: {
-        userName: '',
+      loginForm: {
+        username: '',
         password: ''
       },
-      rules: {
-        userName: [
-          { required: true, message: '请输入用户名', trigger: 'blur' }
-        ],
+      loginRules: {
+        username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 5, max: 20, message: '长度在 5 到 20 个字符', trigger: 'blur' }
+          { min: 5, max: 20, message: '长度在 5 到 20 个字符', trigger: 'blur' },
+          { required: true, trigger: 'blur', validator: validatePassword }
         ]
       },
+      capsTooltip: false,
+      loading: false,
+      showDialog: false,
       isPassing: false,
       submitDisabled: true,
-      qqIcon: require('@/assets/images/login/qqIcon.png')
-    }
-  },
-  computed: {
-    url() {
-      const _url = this.$route.query.Rurl // 获取路由前置守卫中next函数的参数，即登录后要去的页面
-      if (_url) {
-        // 若登录之前有页面，则登录后仍然进入该页面
-        return _url
-      } else {
-        // 若登录之前无页面，则登录后进入首页
-        return '/'
-      }
+      redirect: undefined,
+      otherQuery: {}
     }
   },
   watch: {
+    $route: {
+      handler: function(route) {
+        const query = route.query
+        if (query) {
+          this.redirect = query.redirect
+          this.otherQuery = this.getOtherQuery(query)
+        }
+      },
+      immediate: true
+    },
     //  已验证通过时，若重新输入用户名或密码，滑动解锁恢复原样
-    'ruleForm.userName'() {
+    'loginForm.username'() {
       this.isPassing = false
       this.$refs.dragVerifyRef.reset()
     },
-    'ruleForm.password'() {
+    'loginForm.password'() {
       this.isPassing = false
       this.$refs.dragVerifyRef.reset()
     }
   },
   created() {
-    if (this.$store.getters.isLogin) {
-      // 用户若已登录，自动跳转到首页
-      const username = this.$store.getters.username
-      this.$message({
-        message: username + ' 您已登录！已跳转到首页',
-        center: true,
-        type: 'success'
-      })
-      this.$router.replace({ name: 'Home' })
-    }
     this.$nextTick(() => {
       const element = document.getElementById('loginBackground')
       new CanvasNest(element, config)
     })
+  },
+  mounted() {
+  },
+  destroyed() {
   },
   methods: {
     //  滑动解锁完成
@@ -141,22 +143,54 @@ export default {
         this.submitDisabled = true
       }
     },
-    //  登录按钮
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+    checkCapslock({ shiftKey, key } = {}) {
+      if (key && key.length === 1) {
+        if (shiftKey && (key >= 'a' && key <= 'z') || !shiftKey && (key >= 'A' && key <= 'Z')) {
+          this.capsTooltip = true
+        } else {
+          this.capsTooltip = false
+        }
+      }
+      if (key === 'CapsLock' && this.capsTooltip === true) {
+        this.capsTooltip = false
+      }
+    },
+    handleLogin() {
+      this.$refs.loginForm.validate(valid => {
         if (valid) {
-          // 各项校验通过
+          this.loading = true
+          this.$store.dispatch('user/login', this.loginForm)
+            .then(() => {
+              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+              this.loading = false
+            })
+            .catch(() => {
+              this.loading = false
+            })
+        } else {
+          console.log('error submit!!')
+          return false
         }
       })
+    },
+    getOtherQuery(query) {
+      return Object.keys(query).reduce((acc, cur) => {
+        if (cur !== 'redirect') {
+          acc[cur] = query[cur]
+        }
+        return acc
+      }, {})
     }
   }
 }
 </script>
+
 <style lang="stylus" scoped>
 .loginWrapper
   height 100% !important
   min-height 550px !important
   padding-top 100px
+  // background-color #607B8B
   background-color #2d3a4b
   .formWrapper
     width 375px
@@ -166,11 +200,11 @@ export default {
       margin-bottom 10px
       font-weight 300
       font-size 30px
-      color #000
+      color #7FFFD4
     .loginSystem
       font-weight 300
       color #999
-    .demo-ruleForm
+    .demo-loginForm
       width 100%
       margin-top 20px
       >>> .el-form-item__content
@@ -190,3 +224,4 @@ export default {
       width 70%
       margin-left 86px
 </style>
+

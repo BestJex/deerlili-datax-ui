@@ -1,10 +1,11 @@
-# Datax Web UI
+# DataX-UI
 
 ## 说明
 
-[后端项目github地址](https://github.com/WeiYe-Jing/datax-web)
+[前段项目github地址](https://github.com/deerlili/datax-ui)
+[后端项目github地址](https://github.com/deerlili/datax-backend)
 
-该项目由 [vue-element-admin](https://github.com/PanJiaChen/vue-element-admin) 修改而来
+该项目修改而来 [vue-element-admin](https://github.com/PanJiaChen/vue-element-admin) 
 
 
 ## Build Setup
@@ -12,7 +13,7 @@
 运行
 
 ```
-npm install [ 慢的话用  npm install --registry https://registry.npm.taobao.org]
+npm install --registry https://registry.npm.taobao.org
 ```
 
 修改配置
