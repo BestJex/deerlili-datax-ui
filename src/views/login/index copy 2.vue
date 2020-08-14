@@ -1,8 +1,8 @@
 <template>
   <div id="loginBackground" class="loginWrapper">
     <div class="formWrapper">
-      <h1 class="loginTitle">登录</h1>
-      <p class="loginSystem">离线数据同步平台</p>
+      <h1 class="loginTitle">{{ loginTitle }}</h1>
+      <p class="loginSystem">{{ loginSystem }}</p>
       <el-form
         ref="ruleForm"
         :model="ruleForm"
@@ -14,9 +14,9 @@
         <!-- <el-form-item>
           <el-alert type="success" description="线上演示环境使用奇文社区账号进行登录，网址：www.qiwenshare.com" />
         </el-form-item> -->
-        <el-form-item prop="userName">
+        <el-form-item prop="username">
           <el-input
-            v-model="ruleForm.userName"
+            v-model="ruleForm.username"
             prefix-icon="el-icon-user"
             placeholder="用户名"
           />
@@ -44,7 +44,7 @@
         </el-form-item>
         <!-- <el-form-item class="forgetPassword">忘记密码</el-form-item> -->
         <el-form-item class="loginButtonWrapper">
-          <el-button class="loginButton" type="primary" :disabled="submitDisabled" @click="submitForm('ruleForm')">登录</el-button>
+          <el-button :loading="loading" class="loginButton" type="primary" :disabled="submitDisabled" @click.native.prevent="handleLogin">登录</el-button>
         </el-form-item>
         <!-- <el-form-item style="text-align:left;">
           其他账号登录：
@@ -75,12 +75,14 @@ export default {
   components: { DragVerify },
   data() {
     return {
+      loginTitle: '登录',
+      loginSystem: '离线数据同步平台',
       ruleForm: {
-        userName: '',
+        username: '',
         password: ''
       },
       rules: {
-        userName: [
+        username: [
           { required: true, message: '请输入用户名', trigger: 'blur' }
         ],
         password: [
@@ -90,7 +92,8 @@ export default {
       },
       isPassing: false,
       submitDisabled: true,
-      qqIcon: require('@/assets/images/login/qqIcon.png')
+      loading: false
+      // qqIcon: require('@/assets/images/login/qqIcon.png')
     }
   },
   computed: {
@@ -107,13 +110,23 @@ export default {
   },
   watch: {
     //  已验证通过时，若重新输入用户名或密码，滑动解锁恢复原样
-    'ruleForm.userName'() {
+    'ruleForm.username'() {
       this.isPassing = false
       this.$refs.dragVerifyRef.reset()
     },
     'ruleForm.password'() {
       this.isPassing = false
       this.$refs.dragVerifyRef.reset()
+    },
+    $route: {
+      handler: function(route) {
+        const query = route.query
+        if (query) {
+          this.redirect = query.redirect
+          this.otherQuery = this.getOtherQuery(query)
+        }
+      },
+      immediate: true
     }
   },
   created() {
@@ -132,6 +145,16 @@ export default {
       new CanvasNest(element, config)
     })
   },
+  mounted() {
+    if (this.loginForm.username === '') {
+      this.$refs.username.focus()
+    } else if (this.loginForm.password === '') {
+      this.$refs.password.focus()
+    }
+  },
+  destroyed() {
+    // window.removeEventListener('storage', this.afterQRScan)
+  },
   methods: {
     //  滑动解锁完成
     updateIsPassing(isPassing) {
@@ -141,23 +164,54 @@ export default {
         this.submitDisabled = true
       }
     },
-    //  登录按钮
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+    checkCapslock({ shiftKey, key } = {}) {
+      if (key && key.length === 1) {
+        if (shiftKey && (key >= 'a' && key <= 'z') || !shiftKey && (key >= 'A' && key <= 'Z')) {
+          this.capsTooltip = true
+        } else {
+          this.capsTooltip = false
+        }
+      }
+      if (key === 'CapsLock' && this.capsTooltip === true) {
+        this.capsTooltip = false
+      }
+    },
+    handleLogin() {
+      this.$refs.loginForm.validate(valid => {
         if (valid) {
-          // 各项校验通过
+          this.loading = true
+          this.$store.dispatch('user/login', this.loginForm)
+            .then(() => {
+              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+              this.loading = false
+            })
+            .catch(() => {
+              this.loading = false
+            })
+        } else {
+          console.log('error submit!!')
+          return false
         }
       })
+    },
+    getOtherQuery(query) {
+      return Object.keys(query).reduce((acc, cur) => {
+        if (cur !== 'redirect') {
+          acc[cur] = query[cur]
+        }
+        return acc
+      }, {})
     }
   }
 }
 </script>
+
 <style lang="stylus" scoped>
 .loginWrapper
-  height 100% !important
+  background-color #2d3a4b
+  height 550px !important
   min-height 550px !important
   padding-top 100px
-  background-color #2d3a4b
   .formWrapper
     width 375px
     margin 0 auto
