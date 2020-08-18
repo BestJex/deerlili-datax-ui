@@ -15,6 +15,7 @@ require('codemirror/mode/powershell/powershell.js')
 
 export default {
   name: 'PowershellEditor',
+  // eslint-disable-next-line vue/require-prop-types
   props: ['value'],
   data() {
     return {

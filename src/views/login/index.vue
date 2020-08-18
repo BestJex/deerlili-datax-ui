@@ -1,7 +1,7 @@
 <template>
   <div id="loginBackground" class="loginWrapper">
     <div class="formWrapper">
-      <h1 class="loginTitle">登录</h1>
+      <h1 class="loginTitle">DATAX-WEB</h1>
       <p class="loginSystem">离线数据同步平台</p>
       <el-form
         ref="loginForm"
@@ -44,7 +44,7 @@
           <el-button class="loginButton" type="primary" :disabled="submitDisabled" @click.native.prevent="handleLogin">登录</el-button>
         </el-form-item>
         <!-- <el-form-item>
-          <el-alert type="success" style="text-align:center;" description="如有问题请邮箱联系：deerlili@163.com" />
+          <el-alert type="success" description="如有问题请邮箱联系：deerlili@163.com" />
         </el-form-item> -->
         <!-- <el-form-item style="text-align:left;">
           其他账号登录：
@@ -53,6 +53,9 @@
           </a>
         </el-form-item> -->
       </el-form>
+    </div>
+    <div style="position: absolute;bottom: 0;width: 100%;background: rgba(204, 204, 204, 0.3);height: 35px;">
+      <p style="text-align: center;line-height: 5px;">版权所有©XX科技   2019-2020 技术支持QQ群：XXXXXX</p>
     </div>
   </div>
 </template>
