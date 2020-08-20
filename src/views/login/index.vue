@@ -7,7 +7,6 @@
         ref="loginForm"
         :model="loginForm"
         :rules="loginRules"
-        class="demo-loginForm"
         label-width="100px"
         hide-required-asterisk
       >
@@ -16,6 +15,7 @@
             v-model="loginForm.username"
             prefix-icon="el-icon-user"
             placeholder="用户名"
+            style="width: 375px;margin-left: -100px;"
           />
         </el-form-item>
         <el-form-item prop="password">
@@ -24,6 +24,7 @@
             prefix-icon="el-icon-lock"
             placeholder="密码"
             show-password
+            style="width: 375px;margin-left: -100px;"
           />
         </el-form-item>
         <el-form-item>
@@ -34,6 +35,7 @@
             handler-icon="el-icon-d-arrow-right"
             success-icon="el-icon-circle-check"
             :width="375"
+            style="margin-left: -100px;"
             handler-bg="#F5F7FA"
             :is-passing.sync="isPassing"
             @update:isPassing="updateIsPassing"
@@ -41,7 +43,7 @@
         </el-form-item>
         <!-- <el-form-item class="forgetPassword">忘记密码</el-form-item> -->
         <el-form-item class="loginButtonWrapper">
-          <el-button class="loginButton" type="primary" :disabled="submitDisabled" @click.native.prevent="handleLogin">登录</el-button>
+          <el-button class="loginButton" style="width: 375px;margin-left: -100px;" type="primary" :disabled="submitDisabled" @click.native.prevent="handleLogin">登录</el-button>
         </el-form-item>
         <!-- <el-form-item>
           <el-alert type="success" description="如有问题请邮箱联系：deerlili@163.com" />
@@ -182,49 +184,32 @@ export default {
           acc[cur] = query[cur]
         }
         return acc
-      }, {})
+      })
     }
   }
 }
 </script>
 
-<style lang="stylus" scoped>
-.loginWrapper
-  height 100% !important
-  min-height 550px !important
-  padding-top 100px
-  // background-color #607B8B
-  background-color #2d3a4b
-  .formWrapper
-    width 375px
-    margin 0 auto
-    text-align center
-    .loginTitle
-      margin-bottom 10px
-      font-weight 300
-      font-size 30px
-      color #7FFFD4
-    .loginSystem
-      font-weight 300
-      color #999
-    .demo-loginForm
-      width 100%
-      margin-top 20px
-      >>> .el-form-item__content
-        margin-left 0 !important
-      &>>> .el-input__inner
-        font-size 16px
-      .forgetPassword
-        text-align right
-        margin -22px 0 0 0
-      .loginButtonWrapper
-        .loginButton
-          width 100%
-        &>>> .el-button
-          padding 10px 90px
-          font-size 16px
-    .tip
-      width 70%
-      margin-left 86px
+<style lang="scss" scoped>
+.loginWrapper {
+  height: 100%;
+  min-height: 550px;
+  padding-top: 100px;
+  background-color: #2d3a4b;
+  .formWrapper {
+    width: 375px;
+    margin: 0 auto;
+    text-align: center;
+    .loginTitle {
+      margin-bottom: 10px;
+      font-weight: 300;
+      font-size: 30px;
+      color: #7FFFD4;
+    }
+    .loginSystem {
+      font-weight: 300;
+      color: #999;
+    }
+   }
+}
 </style>
-

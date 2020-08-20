@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <div class="build-container">
-      <el-steps :active="active" finish-status="success">
-        <el-step title="步骤 1" description="构建reader">1</el-step>
+      <el-steps :active="active" finish-status="success" style="width: 80%;margin:0 auto;">
+        <el-step title="步骤 1 构建reader" description="">1</el-step>
         <el-step title="步骤 2" description="构建writer">2</el-step>
         <el-step title="步骤 3" description="字段映射">3</el-step>
         <el-step title="步骤 4" description="构建">4</el-step>
@@ -60,9 +60,10 @@
         <div style="margin-bottom: 20px;" />
         <json-editor v-show="active===4" ref="jsonEditor" v-model="configJson" />
       </div>
-
-      <el-button :disabled="active===1" style="margin-top: 12px;" @click="last">上一步</el-button>
-      <el-button type="primary" style="margin-top: 12px;margin-bottom: 12px;" @click="next">下一步</el-button>
+      <div style="margin:0 auto;">
+        <el-button :disabled="active===1" style="margin-top: 12px;" @click="last">上一步</el-button>
+        <el-button type="primary" style="margin-top: 12px;margin-bottom: 12px;" @click="next">下一步</el-button>
+      </div>
     </div>
   </div>
 </template>

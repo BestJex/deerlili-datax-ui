@@ -1,23 +1,17 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.jobId" placeholder="全部" style="width: 200px" />
-      <el-select v-model="listQuery.jobGroup" placeholder="执行器">
+      <el-input v-model="listQuery.jobId" placeholder="全部" style="width: 150px" />
+      <el-select v-model="listQuery.jobGroup" placeholder="执行器" style="width: 150px">
         <el-option v-for="item in executorList" :key="item.id" :label="item.title" :value="item.id" />
       </el-select>
-      <el-select v-model="listQuery.logStatus" placeholder="类型" style="width: 200px">
+      <el-select v-model="listQuery.logStatus" placeholder="类型" style="width: 150px">
         <el-option v-for="item in logStatusList" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="fetchData">
+      <el-button v-waves type="primary" icon="el-icon-search" @click="fetchData">
         搜索
       </el-button>
-      <el-button
-        class="filter-item"
-        style="margin-left: 10px;"
-        type="primary"
-        icon="el-icon-edit"
-        @click="handlerDelete"
-      >
+      <el-button v-waves type="primary" icon="el-icon-delete" @click="handlerDelete">
         清除
       </el-button>
     </div>
@@ -35,10 +29,10 @@
       <el-table-column align="center" label="任务描述">
         <template slot-scope="scope">{{ scope.row.jobDesc }}</template>
       </el-table-column>
-      <el-table-column label="调度时间" align="center">
+      <el-table-column label="调度时间" align="center" min-width="130px">
         <template slot-scope="scope">{{ scope.row.triggerTime }}</template>
       </el-table-column>
-      <el-table-column label="调度结果" align="center" width="100">
+      <el-table-column label="调度结果" align="center" width="77">
         <template slot-scope="scope"> <span :style="`color:${scope.row.triggerCode==500?'red':''}`">{{ statusList.find(t => t.value === scope.row.triggerCode).label }}</span></template>
       </el-table-column>
       <el-table-column label="调度备注" align="center">
@@ -53,10 +47,10 @@
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column label="执行时间" align="center">
+      <el-table-column label="执行时间" align="center" min-width="130px">
         <template slot-scope="scope">{{ scope.row.handleTime }}</template>
       </el-table-column>
-      <el-table-column label="执行结果" align="center">
+      <el-table-column label="执行结果" align="center" min-width="77px">
         <template slot-scope="scope"> <span :style="`color:${scope.row.handleCode==500?'red':''}`">{{ statusList.find(t => t.value === scope.row.handleCode).label }}</span></template>
       </el-table-column>
       <el-table-column label="执行备注" align="center">
@@ -71,7 +65,7 @@
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="300">
+      <el-table-column label="操作" align="center" width="250">
         <template slot-scope="{row}">
           <el-button v-show="row.executorAddress" type="primary" @click="handleViewJobLog(row)">日志查看</el-button>
           <el-button v-show="row.handleCode===0 && row.triggerCode===200" type="primary" @click="killRunningJob(row)">
@@ -123,7 +117,7 @@
         </el-button>
       </div>
     </el-dialog>
-    <el-dialog title="日志查看" :visible.sync="dialogVisible" width="95%">
+    <el-dialog title="日志查看" :visible.sync="dialogVisible" width="80%">
       <div class="log-container">
         <pre :loading="logLoading" v-text="logContent" />
       </div>
@@ -317,7 +311,7 @@ export default {
         this.dialogFormVisible = false
         this.$notify({
           title: 'Success',
-          message: 'Kill Successfully',
+          message: '任务终止成功！',
           type: 'success',
           duration: 2000
         })
