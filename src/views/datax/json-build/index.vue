@@ -2,10 +2,10 @@
   <div class="app-container">
     <div class="build-container">
       <el-steps :active="active" finish-status="success" style="width: 80%;margin:0 auto;">
-        <el-step title="步骤 1 构建reader" description="">1</el-step>
-        <el-step title="步骤 2" description="构建writer">2</el-step>
-        <el-step title="步骤 3" description="字段映射">3</el-step>
-        <el-step title="步骤 4" description="构建">4</el-step>
+        <el-step title="构建reader" description="">1</el-step>
+        <el-step title="构建writer" description="">2</el-step>
+        <el-step title="字段映射" description="">3</el-step>
+        <el-step title="构建" description="">4</el-step>
       </el-steps>
 
       <div v-show="active===1" class="step1">
