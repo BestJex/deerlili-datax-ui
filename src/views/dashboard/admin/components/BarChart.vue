@@ -6,6 +6,7 @@
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
+import { getList } from '@/api/datax-registry'
 
 const animationDuration = 6000
 
@@ -43,6 +44,22 @@ export default {
     this.chart = null
   },
   methods: {
+    fetchData() {
+      this.listLoading = true
+      this.list = []
+      getList(this.listQuery).then(response => {
+        const { records } = response
+        const { total } = response
+        this.total = total
+        this.list = records
+        this.listLoading = false
+        this.$nextTick(function() {
+          for (let i = 0; i < this.list.length; i++) {
+            this.initChart(this.list[i])
+          }
+        })
+      })
+    },
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
 
@@ -50,7 +67,7 @@ export default {
         tooltip: {
           trigger: 'axis',
           axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            type: 'line' // 默认为直线，可选为：'line' | 'shadow'
           }
         },
         grid: {
@@ -62,7 +79,7 @@ export default {
         },
         xAxis: [{
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: ['192.168.8.118:9999', '192.168.8.119:9999'],
           axisTick: {
             alignWithLabel: true
           }
@@ -74,25 +91,25 @@ export default {
           }
         }],
         series: [{
-          name: 'pageA',
+          name: 'CPU使用率',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [79, 52, 200, 334, 390, 330, 220],
+          data: [40, 60, 200],
           animationDuration
         }, {
-          name: 'pageB',
+          name: '内存使用率',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [80, 52, 200, 334, 390, 330, 220],
+          data: [40, 50, 200],
           animationDuration
         }, {
-          name: 'pageC',
+          name: '负载',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [30, 52, 200, 334, 390, 330, 220],
+          data: [2, 1, 0],
           animationDuration
         }]
       })

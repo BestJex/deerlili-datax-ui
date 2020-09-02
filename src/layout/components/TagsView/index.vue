@@ -9,18 +9,18 @@
         :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
         tag="span"
         class="tags-view-item"
-        @click.middle.native="closeSelectedTag(tag)"
+        @click.middle.native="!isAffix(tag)?closeSelectedTag(tag):''"
         @contextmenu.prevent.native="openMenu(tag,$event)"
       >
         {{ tag.title }}
-        <span v-if="!tag.meta.affix" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
+        <span v-if="!isAffix(tag)" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
       </router-link>
     </scroll-pane>
     <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
-      <li @click="refreshSelectedTag(selectedTag)">Refresh</li>
-      <li v-if="!(selectedTag.meta&&selectedTag.meta.affix)" @click="closeSelectedTag(selectedTag)">Close</li>
-      <li @click="closeOthersTags">Close Others</li>
-      <li @click="closeAllTags(selectedTag)">Close All</li>
+      <li @click="refreshSelectedTag(selectedTag)">刷新</li>
+      <li v-if="!isAffix(selectedTag)" @click="closeSelectedTag(selectedTag)">关闭</li>
+      <li @click="closeOthersTags">关闭其他</li>
+      <li @click="closeAllTags(selectedTag)">关闭全部</li>
     </ul>
   </div>
 </template>
@@ -68,6 +68,9 @@ export default {
   methods: {
     isActive(route) {
       return route.path === this.$route.path
+    },
+    isAffix(tag) {
+      return tag.meta && tag.meta.affix
     },
     filterAffixTags(routes, basePath = '/') {
       let tags = []
@@ -155,7 +158,7 @@ export default {
     toLastView(visitedViews, view) {
       const latestView = visitedViews.slice(-1)[0]
       if (latestView) {
-        this.$router.push(latestView)
+        this.$router.push(latestView.fullPath)
       } else {
         // now the default is to redirect to the home page if there is no tags-view,
         // you can adjust it according to your needs.
@@ -193,7 +196,7 @@ export default {
 
 <style lang="scss" scoped>
 .tags-view-container {
-  height: 50px;
+  height: 34px;
   width: 100%;
   background: #fff;
   border-bottom: 1px solid #d8dce5;
@@ -203,16 +206,15 @@ export default {
       display: inline-block;
       position: relative;
       cursor: pointer;
-      height: 35px;
-      line-height: 35px;
+      height: 26px;
+      line-height: 26px;
       border: 1px solid #d8dce5;
       color: #495060;
       background: #fff;
-      padding: 0 15px;
-      font-size: 13px;
-      margin-left: 10px;
-      margin-top: 15px;
-      border-radius: 3px 3px 0 0;
+      padding: 0 8px;
+      font-size: 12px;
+      margin-left: 5px;
+      margin-top: 4px;
       &:first-of-type {
         margin-left: 15px;
       }
@@ -220,9 +222,9 @@ export default {
         margin-right: 15px;
       }
       &.active {
-        background-color: #198fff;
+        background-color: #42b983;
         color: #fff;
-        border-color: #198fff;
+        border-color: #42b983;
         &::before {
           content: '';
           background: #fff;
