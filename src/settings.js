@@ -1,27 +1,27 @@
 module.exports = {
-  title: 'DataX Web',
+  title: 'DATAX-WEB', // 标签页标题
 
   /**
    * @type {boolean} true | false
-   * @description Whether show the settings right-panel
+   * @description 是否显示设置右面板
    */
   showSettings: false,
 
   /**
    * @type {boolean} true | false
-   * @description Whether need tagsView
+   * @description 是否需要tagsView
    */
   tagsView: true,
 
   /**
    * @type {boolean} true | false
-   * @description Whether fix the header
+   * @description 是否固定页眉
    */
-  fixedHeader: false,
+  fixedHeader: true,
 
   /**
    * @type {boolean} true | false
-   * @description Whether show the logo in sidebar
+   * @description 是否在侧边栏中显示徽标
    */
   sidebarLogo: true,
 

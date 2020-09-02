@@ -15,9 +15,6 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         添加
       </el-button>
-      <!-- <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
-        reviewer
-      </el-checkbox> -->
     </div>
     <el-table
       v-loading="listLoading"
@@ -30,35 +27,35 @@
       <!-- <el-table-column align="center" label="序号" width="95">
         <template slot-scope="scope">{{ scope.$index }}</template>
       </el-table-column> -->
-      <el-table-column label="数据源" width="200" align="center">
+      <el-table-column label="数据源" width="90" align="center">
         <template slot-scope="scope">{{ scope.row.datasource }}</template>
       </el-table-column>
-      <el-table-column label="数据源名称" width="150" align="center">
+      <el-table-column label="数据源名称" min-width="120" align="center">
         <template slot-scope="scope">{{ scope.row.datasourceName }}</template>
       </el-table-column>
-      <el-table-column label="数据源分组" width="200" align="center">
+      <el-table-column label="数据源分组" width="120" align="center">
         <template slot-scope="scope">{{ scope.row.datasourceGroup }}
         </template>
       </el-table-column>
       <!--<el-table-column label="用户名" width="150" align="center">
         <template slot-scope="scope">{{ scope.row.jdbcUsername ? scope.row.jdbcUsername:'-' }}</template>
       </el-table-column>-->
-      <el-table-column label="jdbc连接串" align="center" :show-overflow-tooltip="true">
+      <el-table-column label="jdbc连接串" align="center" width="200" :show-overflow-tooltip="true">
         <template slot-scope="scope">{{ scope.row.jdbcUrl ? scope.row.jdbcUrl:'-' }}</template>
       </el-table-column>
       <!-- <el-table-column label="jdbc驱动类" width="200" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">{{ scope.row.jdbcDriverClass ? scope.row.jdbcDriverClass:'-' }}</template>
       </el-table-column>-->
-      <el-table-column label="ZK地址" width="200" align="center" :show-overflow-tooltip="true">
+      <el-table-column label="ZK地址" width="120" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">{{ scope.row.zkAdress ? scope.row.zkAdress:'-' }}</template>
       </el-table-column>
-      <el-table-column label="数据库名" width="200" align="center" :show-overflow-tooltip="true">-->
+      <el-table-column label="数据库名" width="80" align="center" :show-overflow-tooltip="true">-->
         <template slot-scope="scope">{{ scope.row.databaseName ? scope.row.databaseName:'-' }}</template>-->
       </el-table-column>
-      <el-table-column label="备注" width="150" align="center">
+      <el-table-column label="备注" width="100" align="center">
         <template slot-scope="scope">{{ scope.row.comments }}</template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" min-width="160" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
@@ -83,14 +80,14 @@
           <el-select
             v-model="temp.datasource"
             placeholder="数据源"
-            style="width: 200px"
+            style="width: 30%"
             @change="selectDataSource(temp.datasource)"
           >
             <el-option v-for="item in dataSources" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item label="数据源名称" prop="datasourceName">
-          <el-input v-model="temp.datasourceName" placeholder="数据源名称" style="width: 40%" />
+          <el-input v-model="temp.datasourceName" placeholder="数据源名称" style="width: 30%" />
         </el-form-item>
         <el-form-item label="数据源分组" prop="datasourceGroup">
           <el-input v-model="temp.datasourceGroup" placeholder="数据源分组" style="width: 40%" />
@@ -204,8 +201,8 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: 'Edit',
-        create: 'Create'
+        update: '编辑数据源',
+        create: '添加数据源'
       },
       rules: {
         datasourceName: [{ required: true, message: 'this is required', trigger: 'blur' }],
@@ -316,7 +313,7 @@ export default {
             this.dialogFormVisible = false
             this.$notify({
               title: 'Success',
-              message: 'Created Successfully',
+              message: '添加成功！',
               type: 'success',
               duration: 2000
             })
@@ -338,7 +335,7 @@ export default {
             } else {
               this.$notify({
                 title: 'Success',
-                message: 'Tested Successfully',
+                message: '测试成功！',
                 type: 'success',
                 duration: 2000
               })
@@ -365,7 +362,7 @@ export default {
             this.dialogFormVisible = false
             this.$notify({
               title: 'Success',
-              message: 'Update Successfully',
+              message: '更新成功！',
               type: 'success',
               duration: 2000
             })
