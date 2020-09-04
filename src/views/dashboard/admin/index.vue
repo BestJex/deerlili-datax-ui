@@ -4,13 +4,13 @@
     <el-row :gutter="32">
       <el-col :xs="24" :sm="24" :lg="15">
         <panel-group @handleSetLineChartData="handleSetLineChartData" />
-        <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;height: 420px;">
+        <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;height: 470px;">
           <line-chart :chart-data="lineChartData" />
         </el-row>
       </el-col>
       <el-col :xs="24" :sm="24" :lg="9">
         <div class="chart-wrapper" style="margin-top: 20px;">
-          <bar-chart style="height: 540px;" />
+          <bar-chart style="height: 590px;" />
         </div>
       </el-col>
     </el-row>

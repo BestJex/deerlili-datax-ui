@@ -20,7 +20,7 @@ export default {
     },
     height: {
       type: String,
-      default: '350px'
+      default: '420px'
     },
     autoResize: {
       type: Boolean,
@@ -72,9 +72,10 @@ export default {
         },
         grid: {
           left: 10,
-          right: 10,
+          right: 20,
           bottom: 20,
-          top: 30,
+          height: 370,
+          top: 50,
           containLabel: true
         },
         tooltip: {
@@ -82,7 +83,7 @@ export default {
           axisPointer: {
             type: 'cross'
           },
-          padding: [5, 10]
+          padding: [5, 10] // 弹出框大小
         },
         yAxis: {
           axisTick: {
@@ -90,10 +91,10 @@ export default {
           }
         },
         legend: {
-          data: ['失败', '成功']
+          data: ['执行失败', '执行成功']
         },
         series: [{
-          name: '失败', itemStyle: {
+          name: '执行失败', itemStyle: {
             normal: {
               color: '#FF005A',
               lineStyle: {
@@ -109,7 +110,7 @@ export default {
           animationEasing: 'cubicInOut'
         },
         {
-          name: '成功',
+          name: '执行成功',
           smooth: true,
           type: 'line',
           itemStyle: {
@@ -117,7 +118,7 @@ export default {
               color: '#3888fa',
               lineStyle: {
                 color: '#3888fa',
-                width: 2
+                width: 2 // 坐标轴宽度
               },
               areaStyle: {
                 color: '#f3f8ff'

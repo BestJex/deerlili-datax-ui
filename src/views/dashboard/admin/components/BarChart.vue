@@ -7,22 +7,20 @@
       </el-button>
     </div> -->
     <div v-for="item in list" :key="item.id" class="container">
-      <div style="text-align:center;"><el-tag style="color:#da5416;font-size: 18px;">执行器：{{ item.registryKey }}</el-tag></div>
+      <!-- <div>执行器：{{ item.registryKey }}</div> -->
+      <!-- <el-row>
+        <el-col :span="12">注册地址：{{ item.registryValue }}</el-col>
+        <el-col :span="12">更新时间：{{ item.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
+        </el-col>
+      </el-row> -->
       <el-row>
-        <!-- <el-col :span="12"><el-tag>注册地址：{{ item.registryValue }}</el-tag></el-col>
-        <el-col :span="12"><el-tag>更新时间：{{ item.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</el-tag>
-        </el-col> -->
+        <el-col :span="13">注册地址：{{ item.registryValue }}</el-col>
+        <el-col :span="11">更新时间：{{ item.updateTime | parseTime('{m}-{d} {h}:{i}') }}
+        </el-col>
       </el-row>
-      <el-tag>注册地址：{{ item.registryValue }}</el-tag>
-      <el-tag>更新时间：{{ item.updateTime }}</el-tag>
       <br>
-      <div :class="item.id + ' fl'" style="width: 50%;height: 200px;color:#da5416;" />
-      <div :class="item.id + ' fl'" style="width: 50%;height: 200px;color:#da5416;" />
-      <!-- <div :class="item.id + ' fl' + ' loadAverage'" style="width: 30%;height: 300px ">
-        <p class="title">平均负载</p>
-        <p class="number">{{ item.loadAverage >= 0 ? item.loadAverage : 0 }}</p>
-      </div> -->
-
+      <div :class="item.id + ' fl'" style="width: 50%;height: 270px;color:#da5416;" />
+      <div :class="item.id + ' fl'" style="width: 50%;height: 270px;color:#da5416;" />
     </div>
   </div>
 </template>
@@ -35,16 +33,6 @@ import parseTime from '@/utils'
 export default {
   name: 'Registry',
   directives: { waves, parseTime },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
   data() {
     return {
       list: null,
@@ -62,7 +50,6 @@ export default {
     this.fetchData()
   },
   mounted() {
-
   },
   methods: {
     fetchData() {
@@ -104,7 +91,7 @@ export default {
           name: 'cpu使用率',
           type: 'gauge',
           max: 100,
-          radius: '100%', // 半径
+          radius: '80%', // 半径
           startAngle: 215, // 起始位置
           endAngle: -35, // 终点位置
           detail: {
@@ -140,7 +127,7 @@ export default {
           name: '内存使用率',
           type: 'gauge',
           max: 100,
-          radius: '100%', // 半径
+          radius: '80%', // 半径
           startAngle: 215, // 起始位置
           endAngle: -35, // 终点位置
           detail: {
@@ -161,23 +148,12 @@ export default {
   .container{
     overflow: hidden;
     p{
-      font-size: 14px;color: rgb(102, 102, 102);padding: 10px 0;
+      font-size: 12px;color: rgba(0, 0, 0, 0.45);padding: 10px 0;
       .fl{
-        float: left;
+        float: left;font-size: 12px;
       }
       .fr{
         float: right;
-      }
-    }
-    .loadAverage{
-      p{
-        text-align: center;
-      }
-      .title{
-        font-size: 18px;font-weight: bold;color: #333;padding: 5px 0;margin: 0;
-      }
-      .number{
-        font-size: 50px;color: #da5416
       }
     }
   }
